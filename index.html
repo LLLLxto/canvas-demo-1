@@ -1,16 +1,65 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>画板</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      // 法二(√)
+      // 1. 令canvas与屏幕大小一致
+      let canvas = document.getElementById("canvas"); // 新语法用let,不用var
+      canvas.width = document.documentElement.clientWidth;
+      canvas.height = document.documentElement.clientHeight;
+
+      // 3. 鼠标点击开始画
+      let painting = false; // 初始状态为 false(不画)
+      canvas.onmousedown = () => {
+        painting = true; // 点击鼠标，状态变为true(画)
+      };
+
+      // 2. 鼠标点击处画出蓝色正方形
+      let ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "none";
+
+      // canvas.onclick = (e) => {
+      // 将 onclick 点击 改为 onmousemove 鼠标移动，变得顺滑，因为没有新建DOM，JS没有跨线程操作
+      canvas.onmousemove = (e) => {
+        if (painting === true) {
+          // 接3. 鼠标点击开始画
+          console.log(e.clientX);
+          console.log(e.clientY);
+          // 画矩形
+          // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10); // -5使得鼠标在蓝色正方形中心// (起始点横坐标，起始点纵坐标，宽度，高度)
+
+          // 改为画圆形
+          ctx.beginPath();
+          ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI); // (圆心横坐标，圆心纵坐标，半径，圆弧角度为 0 到 2Π)
+          ctx.stroke();
+          ctx.fill();
+        } else {
+          console.log("什么都不做");
+        }
+      };
+
+      // 4. 鼠标放开停止作画
+      canvas.onmouseup = () => {
+        painting = false; // 放开鼠标，状态变为 false(不画)
+      };
+    </script>
+    <!-- 
+    // 法一
     <div id="canvas"></div>
     <script>
-        canvas.onclick = (e) => {
+        // canvas.onclick = (e) => { 
+        // 将 onclick 点击 改为 onmousemove 鼠标移动，但画的不顺滑，因为新建了div这个DOM，JS操作DOM是跨线程的
+        canvas.onmousemove = (e) => { 
             console.log(e)
             // console.log调试大法
             console.log(e.clientX)
@@ -26,9 +75,9 @@
             div.style.marginLeft='-3px'
             div.style.marginTop='-3px'
             div.style.borderRadius ='50%'
-            div.style.backgroundColor='black'
-             
+            div.style.backgroundColor='black'   
         }
     </script>
-</body>
+-->
+  </body>
 </html>
